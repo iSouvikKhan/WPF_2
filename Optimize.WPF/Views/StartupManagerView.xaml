@@ -12,29 +12,28 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <components:NavigationBar Grid.Row="0" DataContext="{Binding NavigationBarViewModel}"/>
 
-        <Grid Grid.Row="1" MaxWidth="1000" Margin="20">
+        <TextBlock Grid.Row="1" FontSize="28" Text="Startup Manager" Margin="10 10 0 10"/>
 
+        <Grid Grid.Row="2" Margin="10 10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition MaxHeight="200"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock
-            Grid.Row="0"
-            FontSize="28"
-            Text="Startup Manager" />
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                <ListBox x:Name="ProcessListBox"/>
+            </ScrollViewer>
 
-            <TextBlock
-            Grid.Row="1"
-            Margin="0 20 0 0"
-            Text="{Binding WelcomeMessage}" />
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Kill Process" Click="KillProcess_Click" Margin="5"/>
+                <Button Content="Start Process" Click="StartProcess_Click" Margin="5"/>
+            </StackPanel>
         </Grid>
 
     </Grid>

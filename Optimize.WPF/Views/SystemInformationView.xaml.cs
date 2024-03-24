@@ -1,28 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.IO;
+using System;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Management;
 
 namespace Optimize.WPF.Views
 {
-    /// <summary>
-    /// Interaction logic for SystemInformationView.xaml
-    /// </summary>
     public partial class SystemInformationView : UserControl
     {
         public SystemInformationView()
         {
             InitializeComponent();
+            LoadSystemInformation();
+        }
+
+        private void LoadSystemInformation()
+        {
+            // Get CPU name
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                CpuNameTextBlock.Text = obj["Name"].ToString();
+                break; // Only first CPU
+            }
+
+            // Get RAM name
+            searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                RamNameTextBlock.Text = obj["Name"].ToString();
+                break; // Only first RAM
+            }
+
+            // Get disk space
+            DriveInfo driveInfo = new DriveInfo(Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0, 1));
+            DiskSpaceTextBlock.Text = $"{driveInfo.TotalFreeSpace / (1024 * 1024 * 1024)} GB free / {driveInfo.TotalSize / (1024 * 1024 * 1024)} GB total";
+
+            // Get Windows version
+            WindowsVersionTextBlock.Text = Environment.OSVersion.VersionString;
         }
     }
 }
